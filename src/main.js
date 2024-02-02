@@ -1,16 +1,18 @@
-import commandInteraction from "./command-interraction.js";
-import welcomeUser from "./welcome.js";
+import CommandHandler from "./commandsHandler.js";
+import User from "./user.js";
+import EventEmitter from "node:events";
 
 class FileManager {
 
-  constructor(user, pathHandler) {
-    this.user = user;
-    this.pathHandler = pathHandler;
+  constructor() {
+    this.emitter = new EventEmitter();
+    this.user = new User(this.emitter);
+    this.commandHandler = new CommandHandler(this.emitter);
   }
 
   async init() {
-    welcomeUser(this.user, this.pathHandler);
-    commandInteraction(this.user, this.pathHandler);
+    this.user.welcomeUser();
+    this.commandHandler.commandInteraction();
   };
 }
 
