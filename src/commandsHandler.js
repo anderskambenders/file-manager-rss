@@ -1,8 +1,15 @@
 import { createInterface } from 'readline';
+import { ls } from './commands/ls.js';
+import { up } from './commands/up.js';
+import { cd } from './commands/cd.js';
+import { cat } from './commands/cat.js';
+import { add } from './commands/add.js';
+import { rn } from './commands/rn.js';
+import { cp } from './commands/cp.js';
+import { mv } from './commands/mv.js';
+import { rm } from './commands/rm.js';
 import { parseLine } from './utils/parseLine.js';
 import PathHandler from "./path-handler.js";
-import fs from 'node:fs/promises';
-import { resolve } from 'path';
 
 class CommandHandler {
   constructor(emitter) {
@@ -33,9 +40,15 @@ class CommandHandler {
 
   getCommand = (command) => {
     const commandMap = {
-        ls: this.ls,
-        up: this.up,
-        cd: this.cd,
+        ls: ls,
+        up: up,
+        cd: cd,
+        cat: cat,
+        add: add,
+        rn: rn,
+        cp: cp,
+        mv: mv,
+        rm: rm,
     };
     return commandMap[command];
   }
@@ -45,43 +58,18 @@ class CommandHandler {
         const commandObj = parseLine(str);
         const commandFn = this.getCommand(commandObj.command);
         if (commandFn && commandObj.args) {
-          console.log(commandFn, ...commandObj.args)
-          await commandFn(commandObj.args);
+          await commandFn(this.pathHandler ,...commandObj.args);
         } else if (commandFn && !commandObj.args) {
-          await commandFn();
+          await commandFn(this.pathHandler);
         } else {
             console.log('Invalid input');
         }
     } catch (err) {
       console.log('Operation failed');
+      console.error(err)
     }
-    this.emitter.emit('show-current-path');
+    this.pathHandler.showCurrentPath();
   }
-
-  up = async () => {
-    const newPath = resolve(this.pathHandler.currentPath, '..');
-    process.chdir(newPath);
-    this.pathHandler.currentPath = newPath;
-};
-
-  cd = async (destination) => {
-    const newPath = resolve(this.pathHandler.currentPath, destination);
-    process.chdir(newPath);
-    this.pathHandler.currentPath = newPath;
-  };
-
-  ls = async () => {
-    const files = await fs.readdir(this.pathHandler.currentPath, { withFileTypes: true });
-    Promise.all(files);
-    const filesList = files
-        .map((file) => ({
-            Name: file.name,
-            Type: file.isFile() ? 'file' : 'directory',
-        }))
-        .sort((a, b) => a.Name.localeCompare(b.Name));
-    console.table(filesList);
-};
-
 
 }
 
