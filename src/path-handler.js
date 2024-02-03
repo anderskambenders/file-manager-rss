@@ -3,15 +3,8 @@ import path from 'path';
 
 
 class PathHandler {
-  constructor(emitter) {
-    this.emitter = emitter
+  constructor() {
     this._currentPath = homedir();
-    this.emitter.on('show-current-path', () => this.showCurrentPath());
-    // this.emitter.on('get-current-path', (obj) => {
-    //   if (obj.path === null) {
-    //     obj.path = this.currentPath;
-    //   }
-    // });
   }
   get currentPath() {
     return this._currentPath;

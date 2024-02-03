@@ -4,8 +4,6 @@ import { unlink } from 'node:fs/promises';
 export const mv = async (pathHandler, filePath, newFilePath) => {
     const sourcePath = pathHandler.getAbsoluteIfNot(filePath);
     const destinationPath = pathHandler.getAbsoluteIfNot(newFilePath);
-    console.log(sourcePath)
-    console.log(destinationPath)
     const readStream = fs.createReadStream(sourcePath);
     const writeStream = fs.createWriteStream(destinationPath);
     readStream.pipe(writeStream);

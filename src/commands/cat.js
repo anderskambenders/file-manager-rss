@@ -2,7 +2,6 @@ import { createReadStream } from 'node:fs';
 
 export const cat = async (pathHandler, filename) => {
   const sourcePath = pathHandler.getAbsoluteIfNot(filename);
-  console.log(sourcePath)
   const readStream = createReadStream(sourcePath);
   readStream.on('data', (data) => {
       process.stdout.write(data);

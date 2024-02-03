@@ -8,13 +8,17 @@ import { rn } from './commands/rn.js';
 import { cp } from './commands/cp.js';
 import { mv } from './commands/mv.js';
 import { rm } from './commands/rm.js';
+import { hash } from './commands/hash.js';
 import { parseLine } from './utils/parseLine.js';
 import PathHandler from "./path-handler.js";
+import { osCommand } from './commands/os.js';
+import { compress } from './commands/compress.js';
+import { decompress } from './commands/decompress.js';
 
 class CommandHandler {
   constructor(emitter) {
     this.emitter = emitter;
-    this.pathHandler = new PathHandler(this.emitter);
+    this.pathHandler = new PathHandler();
   }
 
   commandInteraction = () => {
@@ -49,6 +53,10 @@ class CommandHandler {
         cp: cp,
         mv: mv,
         rm: rm,
+        os: osCommand,
+        hash: hash,
+        compress: compress,
+        decompress: decompress,
     };
     return commandMap[command];
   }
@@ -57,7 +65,9 @@ class CommandHandler {
     try {
         const commandObj = parseLine(str);
         const commandFn = this.getCommand(commandObj.command);
-        if (commandFn && commandObj.args) {
+        if (commandObj.command === 'os') {
+          await osCommand(commandObj.args)
+        } else if (commandFn && commandObj.args) {
           await commandFn(this.pathHandler ,...commandObj.args);
         } else if (commandFn && !commandObj.args) {
           await commandFn(this.pathHandler);
