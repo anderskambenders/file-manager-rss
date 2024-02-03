@@ -2,6 +2,7 @@ import { createInterface } from 'readline';
 import { parseLine } from './utils/parseLine.js';
 import PathHandler from "./path-handler.js";
 import fs from 'node:fs/promises';
+import { resolve } from 'path';
 
 class CommandHandler {
   constructor(emitter) {
@@ -33,6 +34,8 @@ class CommandHandler {
   getCommand = (command) => {
     const commandMap = {
         ls: this.ls,
+        up: this.up,
+        cd: this.cd,
     };
     return commandMap[command];
   }
@@ -40,10 +43,10 @@ class CommandHandler {
   async executeCommand (str) {
     try {
         const commandObj = parseLine(str);
-        console.log(this.getCommand('ls'))
         const commandFn = this.getCommand(commandObj.command);
         if (commandFn && commandObj.args) {
-          await commandFn(...commandObj.args);
+          console.log(commandFn, ...commandObj.args)
+          await commandFn(commandObj.args);
         } else if (commandFn && !commandObj.args) {
           await commandFn();
         } else {
@@ -51,10 +54,21 @@ class CommandHandler {
         }
     } catch (err) {
       console.log('Operation failed');
-      console.error(err)
     }
     this.emitter.emit('show-current-path');
   }
+
+  up = async () => {
+    const newPath = resolve(this.pathHandler.currentPath, '..');
+    process.chdir(newPath);
+    this.pathHandler.currentPath = newPath;
+};
+
+  cd = async (destination) => {
+    const newPath = resolve(this.pathHandler.currentPath, destination);
+    process.chdir(newPath);
+    this.pathHandler.currentPath = newPath;
+  };
 
   ls = async () => {
     const files = await fs.readdir(this.pathHandler.currentPath, { withFileTypes: true });
