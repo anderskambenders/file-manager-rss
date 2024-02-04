@@ -3,8 +3,10 @@ import path from 'path';
 
 
 class PathHandler {
-  constructor() {
+  constructor(emitter) {
     this._currentPath = homedir();
+    this.emitter = emitter;
+    this.emitter.on('show-curr-path', () => this.showCurrentPath())
   }
   get currentPath() {
     return this._currentPath;

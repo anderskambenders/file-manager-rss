@@ -18,7 +18,7 @@ import { decompress } from './commands/decompress.js';
 class CommandHandler {
   constructor(emitter) {
     this.emitter = emitter;
-    this.pathHandler = new PathHandler();
+    this.pathHandler = new PathHandler(this.emitter);
   }
 
   commandInteraction = () => {

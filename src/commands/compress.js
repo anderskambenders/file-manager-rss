@@ -7,7 +7,6 @@ export const compress = async (pathHandler, filePath, fileDestination) => {
     const readStream = fs.createReadStream(sourcePath);
     const writeStream = fs.createWriteStream(destinationPath);
     const brotli = zlib.createBrotliCompress();
-
     return new Promise((resolve, reject) => {
         readStream.pipe(brotli).pipe(writeStream)
         .on('finish', () => {
