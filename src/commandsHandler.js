@@ -15,12 +15,22 @@ class CommandsHandler {
       input: process.stdin,
       output:process.stdout,
     });
-    rl.on('line', async () => {
+    rl.on('line', async (line) => {
+      if (line.toString().trim() === '.exit') {
+        this.emitter.emit('exit');
+      }
     }).on('error', (error) => {
       console.log(error);
     })
   };
-
+  async executeCommand () {
+    try {
+    } catch (error) {
+      console.log('Operation failed');
+      console.error(error)
+    }
+    this.pathHandler.showCurrentPath();
+  }
 };
 
 export default CommandsHandler;
