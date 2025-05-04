@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anderskambenders/file-manager-rss.git"
   },
-  "author": "",
+  "author": "anderskambenders",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/anderskambenders/file-manager-rss/issues"
