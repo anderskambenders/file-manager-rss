@@ -23,6 +23,15 @@ class CommandsHandler {
       console.log(error);
     })
   };
+
+  getCommand = (command) => {
+    const commandMap = {
+        cd: cd,
+
+    };
+    return commandMap[command];
+  }
+
   async executeCommand () {
     try {
     } catch (error) {
