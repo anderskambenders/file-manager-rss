@@ -10,6 +10,7 @@ import { mv } from "./commands/mv.js";
 import { cp } from "./commands/cp.js";
 import { rn } from "./commands/rn.js";
 import { rm } from "./commands/rm.js";
+import { osCommand } from "./commands/os.js";
 import parseLine from "./parseLine.js";
 
 class CommandsHandler {
@@ -40,7 +41,7 @@ class CommandsHandler {
 
   getCommand = (command) => {
     const commandMap = {
-        add, cat, cd, cp, ls, mkdir, mv, rm, rn, up,
+        add, cat, cd, cp, ls, mkdir, mv, rm, rn, up, os: osCommand,
     };
     return commandMap[command];
   }
@@ -49,13 +50,15 @@ class CommandsHandler {
     try {
       const commandObj = parseLine(str);
       const commandFn = this.getCommand(commandObj.command);
-      if (commandFn && commandObj.args) {
+      if (commandObj.command === 'os') {
+        await osCommand(commandObj.args)
+      } else if (commandFn && commandObj.args) {
         await commandFn(this.pathHandler ,...commandObj.args);
       } else if (commandFn && !commandObj.args) {
         await commandFn(this.pathHandler);
       } else {
           console.log('Invalid input');
-      };
+      }
     } catch (error) {
       console.log('Operation failed');
       console.error(error)
