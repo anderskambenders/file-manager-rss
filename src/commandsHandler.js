@@ -3,6 +3,13 @@ import PathHandler from "./pathHandler.js";
 import { cd } from "./commands/cd.js";
 import { ls } from "./commands/ls.js";
 import { up } from "./commands/up.js";
+import { add } from "./commands/add.js";
+import { cat } from "./commands/cat.js";
+import { mkdir } from "./commands/mkdir.js";
+import { mv } from "./commands/mv.js";
+import { cp } from "./commands/cp.js";
+import { rn } from "./commands/rn.js";
+import { rm } from "./commands/rm.js";
 import parseLine from "./parseLine.js";
 
 class CommandsHandler {
@@ -33,9 +40,7 @@ class CommandsHandler {
 
   getCommand = (command) => {
     const commandMap = {
-        cd: cd,
-        up: up,
-        ls: ls,
+        add, cat, cd, cp, ls, mkdir, mv, rm, rn, up,
     };
     return commandMap[command];
   }
