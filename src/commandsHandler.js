@@ -8,8 +8,11 @@ import { cat } from "./commands/cat.js";
 import { mkdir } from "./commands/mkdir.js";
 import { mv } from "./commands/mv.js";
 import { cp } from "./commands/cp.js";
+import { hash } from "./commands/hash.js";
 import { rn } from "./commands/rn.js";
 import { rm } from "./commands/rm.js";
+import { compress } from "./commands/compress.js";
+import { decompress } from "./commands/decompress.js";
 import { osCommand } from "./commands/os.js";
 import parseLine from "./parseLine.js";
 
@@ -41,7 +44,7 @@ class CommandsHandler {
 
   getCommand = (command) => {
     const commandMap = {
-        add, cat, cd, cp, ls, mkdir, mv, rm, rn, up, os: osCommand,
+        add, cat, cd, cp, ls, mkdir, mv, rm, rn, up, os: osCommand, hash, compress, decompress
     };
     return commandMap[command];
   }
@@ -59,9 +62,8 @@ class CommandsHandler {
       } else {
           console.log('Invalid input');
       }
-    } catch (error) {
+    } catch (e) {
       console.log('Operation failed');
-      console.error(error)
     }
     this.pathHandler.showCurrentPath();
   }
