@@ -15,6 +15,7 @@ class User {
   welcomeUser () {
     console.log(`Welcome to the File Manager, ${this._name}!`)
     console.log(`To exit press "Ctrl + C" or '.exit'`);
+    this.emitter.emit('show-current-path');
   };
 
   exit = async () => {
